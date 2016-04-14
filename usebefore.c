@@ -116,6 +116,8 @@ void bar(char *buf){
     anotherbuf[i]=buf[i];
   }
 
+  anotherbuf[i/4]='\0';
+
   //call baz()
   baz(passthrough(buf));
   

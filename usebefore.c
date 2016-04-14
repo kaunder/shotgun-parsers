@@ -21,9 +21,10 @@
 void usage();
 void debug(char *str);
 void getInput(char *buf);
-void foo();
-void bar();
-void baz();
+void foo(char *buf);
+void bar(char *buf);
+char* baz(char *buf);
+char* passthrough(char *buf);
 
 int main(int argc, char *argv[]){
 
@@ -40,7 +41,15 @@ int main(int argc, char *argv[]){
   //Get a bunch o random input
   getInput(randobuf);
 
-  printf("%s", randobuf);
+
+  //Do a bunch of stuff with the random input
+
+  foo(randobuf);
+  bar(randobuf);
+
+  printf("%s",baz(randobuf));
+  
+  //printf("%s", randobuf);
   
 
   return 0;
@@ -73,8 +82,70 @@ void getInput(char *buf){
   debug("Done getting input from /dev/random.");
 }
 
+//copy the first 32 bytes from random buffer into smaller buffer
+void foo(char *buf){
+
+  //use some bytes from buf
+  int i=0;
+  char *smallbuf = malloc(33);
+  for(i=0;i<32;i++){
+    smallbuf[i]=buf[i];
+  }
+
+  //null terminate smallbuf
+  smallbuf[32]='\0';
+  
+  //call baz, why not
+  char *c=baz(smallbuf);
+
+  //let's see it
+  printf("%s\n",c);
+  
+  //call bar()
+  bar(buf);
+  
+}
+
+//read every 4th char out of the input buffer
+void bar(char *buf){
+  
+  //here have bytes
+  int i=0;
+  char *anotherbuf = malloc(NUM_BYTES/4);
+  for(i=0;i<NUM_BYTES;i+=4){
+    anotherbuf[i]=buf[i];
+  }
+
+  //call baz()
+  baz(passthrough(buf));
+  
+}
+
+
+char* baz(char *buf){
+
+  //use even more bytes..
+  char c = buf[NUM_BYTES];
+  char *onemore = malloc(NUM_BYTES/2);
+
+  memcpy(onemore, buf, NUM_BYTES/2);
+  
+
+  return "c";
+}
+
+//pick a single char off of buf, pass buf on
+char* passthrough(char *buf){
+
+  char c = buf[NUM_BYTES/2];
+
+  return buf;
+  
+}
+
 void debug(char *str){
   if(debug_flag){
     printf("%s\n",str);
   }
 }
+

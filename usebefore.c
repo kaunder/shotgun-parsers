@@ -14,7 +14,7 @@
 #define debug_flag 0
 
 //read in something...from a network?
-//then use it shittily all over the place
+//then use it all over the place, sans recognition
 
 
 //Function prototypes
@@ -130,6 +130,7 @@ char* baz(char *buf){
   char c = buf[NUM_BYTES];
   char *onemore = malloc(NUM_BYTES/2);
 
+  //aagh omg we're memcpying
   memcpy(onemore, buf, NUM_BYTES/2);
   
 
